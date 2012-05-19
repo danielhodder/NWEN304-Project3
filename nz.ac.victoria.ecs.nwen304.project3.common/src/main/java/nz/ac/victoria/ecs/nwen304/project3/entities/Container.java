@@ -27,7 +27,7 @@ public final class Container extends Item {
 	 * 
 	 * @param name	The name of the container
 	 */
-	public Container(String name, Container parent) {
+	public Container(final String name, final Container parent) {
 		this(name, parent, new ArrayList<Item>(0));
 	}
 	
@@ -37,19 +37,19 @@ public final class Container extends Item {
 	 * @param name	The name of the container
 	 * @param contents	The contents of the container
 	 */
-	public Container(String name, Container parent, List<Item> items) {
+	public Container(final String name, final Container parent, final List<Item> items) {
 		super(name, parent);
 		this.items = items;
-		this.setParent(parent);
+		setParent(parent);
 	}
 	
 	// -------------------------- Generated Code Below --------------------------
 
 	public List<Item> getItems() {
-		return items;
+		return this.items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(final List<Item> items) {
 		this.items = items;
 	}
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://ecs.vuw.ac.nz/nwen304/project3" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ecs.vuw.ac.nz/nwen304/project3">
+
+
+    <element name="container" type="tns:container"></element>
+    
+    <complexType name="container">
+    <complexContent>
+    		<extension base="tns:item">
+    <sequence>
+    	<element name="contents" type="tns:contentsType" maxOccurs="1" minOccurs="1"></element>
+    </sequence>
+    </extension>
+    </complexContent>
+    </complexType>
+
+
+    <complexType name="linkType">
+    	<attribute name="rel" use="required">
+    		<simpleType>
+    			<restriction base="string">
+    				<enumeration value="self"></enumeration>
+    				<enumeration value="create"></enumeration>
+    				<enumeration value="delete"></enumeration>
+    				<enumeration value="modify"></enumeration>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="href" type="string" use="required"></attribute>
+    </complexType>
+
+
+    <complexType name="contentsType">
+    	<sequence maxOccurs="unbounded" minOccurs="0">
+    		<choice>
+    			<element name="container" type="tns:container"></element>
+    			<element name="note" type="tns:note"></element>
+    		</choice>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="note">
+    	<complexContent>
+    		<extension base="tns:item">
+    			<sequence>
+    				<element name="contents" type="string" maxOccurs="1" minOccurs="1"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="item">
+    	<sequence>
+    		<element name="link" type="tns:linkType"
+    			maxOccurs="unbounded" minOccurs="1">
+    		</element>
+    	</sequence>
+    	<attribute name="name" type="string" use="required"></attribute>
+    </complexType>
+</schema>

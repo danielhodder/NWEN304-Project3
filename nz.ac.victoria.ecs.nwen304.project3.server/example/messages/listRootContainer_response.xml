@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The response to the request for getting the contents of the root container -->
+<container name="." xmlns="http://ecs.vuw.ac.nz/nwen304/project3">
+	<link rel="self" href="http://{SERVER}/Container/." />
+	<link rel="add" href="http://{SERVER}/Container/." />
+	
+	<contents>
+		<note name="...">
+			<link rel="self" href="http://{SERVER}/Note/{GUID}" />
+			<link ref="modify" href="http://{SERVER}/Note/{GUID}" />
+			<link ref="delete" href="http://{SERVER}/Note/{GUID}" />
+			<contents>
+				...
+			</contents>
+		</note>
+		
+		<container name="...">
+			<link rel="self" href="http://{SERVER}/Note/{GUID}" />
+			<link ref="modify" href="http://{SERVER}/Note/{GUID}" />
+			<link ref="delete" href="http://{SERVER}/Note/{GUID}" />
+			
+			<contents>
+				<note name="...">
+					<link rel="self" href="http://{SERVER}/Note/{GUID}" />
+					<link ref="modify" href="http://{SERVER}/Note/{GUID}" />
+					<link ref="delete" href="http://{SERVER}/Note/{GUID}" />
+					<contents>
+						...
+					</contents>
+				</note>
+			</contents>
+		</container>
+	</contents>
+</container>

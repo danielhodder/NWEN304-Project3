@@ -36,18 +36,18 @@ public abstract class Item implements Serializable {
 	 * 
 	 * @param name	The name of the item.
 	 */
-	public Item(String name, Container parent) {
-		this.setName(name);
-		this.setParent(parent);
+	public Item(final String name, final Container parent) {
+		setName(name);
+		setParent(parent);
 	}
 	
 	// -------------------------- Generated Code Below --------------------------
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -55,41 +55,41 @@ public abstract class Item implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Item other = (Item) obj;
-		if (name == null) {
+		final Item other = (Item) obj;
+		if (this.name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!this.name.equals(other.name))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("Item [name=");
-		builder.append(name);
+		builder.append(this.name);
 		builder.append("]");
 		return builder.toString();
 	}
 
 	public Item getParent() {
-		return parent;
+		return this.parent;
 	}
 
-	public void setParent(Container parent) {
+	public void setParent(final Container parent) {
 		this.parent = parent;
 	}
 }
