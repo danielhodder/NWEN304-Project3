@@ -7,13 +7,13 @@ public abstract class AbstractActionBean implements ActionBean {
 	private ActionBeanContext context;
 	
 	@Override
-	public void setContext(ActionBeanContext context) {
+	public void setContext(final ActionBeanContext context) {
 		this.context = context;
 	}
 
 	@Override
 	public ActionBeanContext getContext() {
-		return context;
+		return this.context;
 	}
 
 }

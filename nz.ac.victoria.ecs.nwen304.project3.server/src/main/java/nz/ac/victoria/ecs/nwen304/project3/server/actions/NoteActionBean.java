@@ -21,16 +21,16 @@ public class NoteActionBean extends AbstractActionBean {
 	
 	@HandlesEvent("new")
 	public Resolution createNewNote() {
-		return new XMLEntityResolution(note);
+		return new XMLEntityResolution(this.note);
 	}
 	
 	// ---------- GENERATED CODE ----------
 
 	public Note getNote() {
-		return note;
+		return this.note;
 	}
 
-	public void setNote(Note note) {
+	public void setNote(final Note note) {
 		this.note = note;
 	}
 }

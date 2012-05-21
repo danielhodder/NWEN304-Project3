@@ -17,18 +17,18 @@ public final class NoteTypeConverter implements TypeConverter<Note> {
 	private DataExchange data;
 	
 	@Override
-	public void setLocale(Locale locale) { /* NOP */ }
+	public void setLocale(final Locale locale) { /* NOP */ }
 
 	@Override
-	public Note convert(String input, Class<? extends Note> targetType, Collection<ValidationError> errors) {
+	public Note convert(final String input, final Class<? extends Note> targetType, final Collection<ValidationError> errors) {
 		if (input == null)
 			return null;
 		
 		try {
-			Item item = data.getItemByID(UUID.fromString(input));
+			final Item item = this.data.getItemByID(UUID.fromString(input));
 			
 			return (item instanceof Note) ? (Note) item : null;
-		} catch (IllegalArgumentException iae) {
+		} catch (final IllegalArgumentException iae) {
 			// This means that the UUID was not valid
 			return null;
 		}
