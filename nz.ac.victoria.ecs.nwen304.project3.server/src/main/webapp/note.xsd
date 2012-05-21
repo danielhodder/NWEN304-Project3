@@ -7,14 +7,11 @@
     <complexType name="container">
     	<complexContent>
     		<extension base="tns:item">
-	    		<choice>
 	    			<sequence>
 	    				<element name="contents" type="tns:contentsType"
-	    					maxOccurs="1" minOccurs="1">
+	    					maxOccurs="1" minOccurs="0">
 	    				</element>
 	    			</sequence>
-	    			<element name="null" type="anySimpleType" maxOccurs="0" minOccurs="0"></element>
-	    		</choice>
     		</extension>
     	</complexContent>
     </complexType>
@@ -47,25 +44,19 @@
     <complexType name="note">
     	<complexContent>
     		<extension base="tns:item">
-    			<choice>
 	    			<sequence>
-	    				<element name="contents" type="string" maxOccurs="1" minOccurs="1"></element>
+	    				<element name="contents" type="string" maxOccurs="1" minOccurs="0"></element>
 	    			</sequence>
-	    			<element name="null" type="anySimpleType" maxOccurs="0" minOccurs="0"></element>
-	    		</choice>
     		</extension>
     	</complexContent>
     </complexType>
 
     <complexType name="item">
-    	<choice>
     		<sequence>
     			<element name="link" type="tns:linkType"
-    				maxOccurs="unbounded" minOccurs="1">
+    				maxOccurs="unbounded" minOccurs="0">
     			</element>
     		</sequence>
-    		<element name="null" type="anySimpleType" maxOccurs="0" minOccurs="0"></element>
-    	</choice>
     	<attribute name="name" type="string" use="required"></attribute>
     </complexType>
 </schema>
