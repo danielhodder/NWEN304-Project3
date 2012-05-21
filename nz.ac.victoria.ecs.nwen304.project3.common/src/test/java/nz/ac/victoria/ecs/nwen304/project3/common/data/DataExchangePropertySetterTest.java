@@ -16,14 +16,21 @@ import org.junit.Test;
 public class DataExchangePropertySetterTest {
 	@Test
 	public void testGetSingleItemWorks() {
-		Item item = new DataExchange() {
-			public void save(Item item) { /* NOP */}
+		final Item item = new DataExchange() {
+			@Override
+			public void save(final Item item) { /* NOP */}
 			
-			public Item getItemByID(UUID id) { return new Note("a", null, null); }
+			@Override
+			public Item getItemByID(final UUID id) { return new Note("a", null, null); }
 			
-			public List<Item> getAllElementsInContainer(UUID containerID) { return null; }
+			@Override
+			public List<Item> getAllElementsInContainer(final UUID containerID) { return null; }
 			
-			public void delete(Item item) { /* NOP */ }
+			@Override
+			public void delete(final Item item) { /* NOP */ }
+
+			@Override
+			public List<Item> getAllElementsInContainer(final Container container) { /* NOP */ return null; }
 		}.getItemByID(null);
 		
 		assertSame(true, item.isFromDatasource());
@@ -31,43 +38,53 @@ public class DataExchangePropertySetterTest {
 	
 	@Test
 	public void testGettingListOfItemsWorks() {
-		List<Item> items = new DataExchange() {
+		final List<Item> items = new DataExchange() {
 			@Override
-			public void save(Item item) { /* NOP */ }
+			public void save(final Item item) { /* NOP */ }
 			
 			@Override
-			public Item getItemByID(UUID id) { return null; }
+			public Item getItemByID(final UUID id) { return null; }
 			
 			@Override
-			public List<Item> getAllElementsInContainer(UUID containerID) { 
+			public List<Item> getAllElementsInContainer(final UUID containerID) { 
 				return Arrays.<Item>asList(new Note("a", null, null)); }
 			
 			@Override
-			public void delete(Item item) { /* NOP */ }
-		}.getAllElementsInContainer(null);
+			public void delete(final Item item) { /* NOP */ }
+
+			@Override
+			public List<Item> getAllElementsInContainer(final Container container) { /* NOP */ return null; }
+		}.getAllElementsInContainer((UUID) null);
 		
-		for (Item i : items)
+		for (final Item i : items)
 			assertSame(true, i.isFromDatasource());
 	}
 	
 	@Test
 	public void testGettingElementsInsideAContainerWorksCorreectly() {
-		Item item = new DataExchange() {
+		final Item item = new DataExchange() {
 			private Container c;
 			
 			{
-				c = new Container("a", null, null);
-				Note n = new Note("b", c, null);
-				c.setItems(Arrays.<Item>asList(n));
+				this.c = new Container("a", null, null);
+				final Note n = new Note("b", this.c, null);
+				this.c.setItems(Arrays.<Item>asList(n));
 			}
 			
-			public void save(Item item) { /* NOP */}
+			@Override
+			public void save(final Item item) { /* NOP */}
 			
-			public Item getItemByID(UUID id) { return c; }
+			@Override
+			public Item getItemByID(final UUID id) { return this.c; }
 			
-			public List<Item> getAllElementsInContainer(UUID containerID) { return null; }
+			@Override
+			public List<Item> getAllElementsInContainer(final UUID containerID) { return null; }
 			
-			public void delete(Item item) { /* NOP */ }
+			@Override
+			public void delete(final Item item) { /* NOP */ }
+
+			@Override
+			public List<Item> getAllElementsInContainer(final Container container) { /* NOP */ return null; }
 		}.getItemByID(null);
 		
 		assertSame(true, ((Container) item).getItems().get(0).isFromDatasource());
