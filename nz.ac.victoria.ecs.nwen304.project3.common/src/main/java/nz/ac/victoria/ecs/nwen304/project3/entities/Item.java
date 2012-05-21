@@ -27,6 +27,11 @@ public abstract class Item implements Serializable {
 	private Container parent;
 	
 	/**
+	 * Has the item been loaded from a datasource or is is created by client code.
+	 */
+	private boolean fromDatasource;
+	
+	/**
 	 * An internal consturctor used by the ORM implementation
 	 */
 	Item() {}
@@ -91,5 +96,19 @@ public abstract class Item implements Serializable {
 
 	public void setParent(final Container parent) {
 		this.parent = parent;
+	}
+
+	/**
+	 * @return the fromDatasource
+	 */
+	public boolean isFromDatasource() {
+		return this.fromDatasource;
+	}
+
+	/**
+	 * @param fromDatasource the fromDatasource to set
+	 */
+	public void setFromDatasource(final boolean fromDatasource) {
+		this.fromDatasource = fromDatasource;
 	}
 }
