@@ -94,6 +94,8 @@ public final class Container extends Item {
 	@Override
 	public String toString() {
 		return "Container [items=" + this.items + ", getName()="
-				+ getName() + ", getParent()=" + getParent() + "]";
+				+ getName() + ", isFromDatasource()="
+				+ isFromDatasource() + ", getUuid()=" + getUuid()
+				+ "]";
 	}
 }

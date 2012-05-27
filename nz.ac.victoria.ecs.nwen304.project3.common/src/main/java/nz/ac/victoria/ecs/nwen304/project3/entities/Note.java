@@ -1,6 +1,7 @@
 package nz.ac.victoria.ecs.nwen304.project3.entities;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 
@@ -11,7 +12,7 @@ import javax.persistence.Entity;
  *
  */
 @Entity
-public final class Note extends Item implements Serializable {
+public class Note extends Item implements Serializable {
 	private static final long serialVersionUID = -6066398017441454761L;
 	
 	/**
@@ -43,6 +44,12 @@ public final class Note extends Item implements Serializable {
 		this(name, parent);
 		
 		setContents(contents);
+	}
+	
+	Note(final String name, final String contents, final UUID uuid) {
+		this(name, null, contents);
+		
+		setUuid(uuid);
 	}
 
 	/**
@@ -97,6 +104,8 @@ public final class Note extends Item implements Serializable {
 	@Override
 	public String toString() {
 		return "Note [contents=" + this.contents + ", getName()="
-				+ getName() + ", getParent()=" + getParent() + "]";
+				+ getName() + ", isFromDatasource()="
+				+ isFromDatasource() + ", getUuid()=" + getUuid()
+				+ "]";
 	}
 }
