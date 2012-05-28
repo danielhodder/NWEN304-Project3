@@ -100,11 +100,11 @@ public final class Container extends Item {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("Container [items=");
-		builder.append(items);
+		builder.append(this.items);
 		builder.append(", root=");
-		builder.append(root);
+		builder.append(this.root);
 		builder.append(", getName()=");
 		builder.append(getName());
 		builder.append(", getUuid()=");
@@ -114,10 +114,10 @@ public final class Container extends Item {
 	}
 
 	public boolean isRoot() {
-		return root;
+		return this.root;
 	}
 
-	public void setRoot(boolean root) {
+	public void setRoot(final boolean root) {
 		this.root = root;
 	}
 }
