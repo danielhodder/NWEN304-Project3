@@ -2,6 +2,7 @@ package nz.ac.victoria.ecs.nwen304.project3.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -22,6 +23,11 @@ public final class Container extends Item {
 	@OneToMany
 	private List<Item> items;
 	
+	/**
+	 * A flag to say if this is the root container or not.
+	 */
+	private boolean root;
+	
 	Container() {}
 	
 	/**
@@ -29,8 +35,8 @@ public final class Container extends Item {
 	 * 
 	 * @param name	The name of the container
 	 */
-	public Container(final String name, final Container parent) {
-		this(name, parent, new ArrayList<Item>(0));
+	public Container(final String name) {
+		this(name, new ArrayList<Item>(0));
 	}
 	
 	/**
@@ -39,11 +45,15 @@ public final class Container extends Item {
 	 * @param name	The name of the container
 	 * @param contents	The contents of the container
 	 */
-	public Container(final String name, final Container parent, final List<Item> items) {
-		super(name, parent);
+	public Container(final String name, final List<Item> items) {
+		super(name);
+		
+		if (items == null)
+			throw new IllegalArgumentException("The list of items can not be null");
+		
 		this.items = items;
 		
-		setParent(parent);
+		setUuid(UUID.randomUUID());
 	}
 	
 	// -------------------------- Generated Code Below --------------------------
@@ -88,14 +98,26 @@ public final class Container extends Item {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Container [items=" + this.items + ", getName()="
-				+ getName() + ", isFromDatasource()="
-				+ isFromDatasource() + ", getUuid()=" + getUuid()
-				+ "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Container [items=");
+		builder.append(items);
+		builder.append(", root=");
+		builder.append(root);
+		builder.append(", getName()=");
+		builder.append(getName());
+		builder.append(", getUuid()=");
+		builder.append(getUuid());
+		builder.append("]");
+		return builder.toString();
+	}
+
+	public boolean isRoot() {
+		return root;
+	}
+
+	public void setRoot(boolean root) {
+		this.root = root;
 	}
 }

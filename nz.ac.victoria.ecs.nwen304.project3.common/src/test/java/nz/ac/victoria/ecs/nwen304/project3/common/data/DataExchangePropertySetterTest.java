@@ -66,7 +66,7 @@ public class DataExchangePropertySetterTest {
 			private Container c;
 			
 			{
-				this.c = new Container("a", null, null);
+				this.c = new Container("a");
 				final Note n = new Note("b", this.c, null);
 				this.c.setItems(Arrays.<Item>asList(n));
 			}

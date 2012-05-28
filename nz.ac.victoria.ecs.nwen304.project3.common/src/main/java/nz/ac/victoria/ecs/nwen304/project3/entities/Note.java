@@ -27,8 +27,12 @@ public class Note extends Item implements Serializable {
 	 * Creates a new note
 	 * 
 	 * @param name	The name of the note
-	 * @param parent	The parent of this note
 	 */
+	public Note(String name) {
+		super(name);
+	}
+	
+	@Deprecated
 	public Note(final String name, final Container parent) {
 		super(name, parent);
 	}

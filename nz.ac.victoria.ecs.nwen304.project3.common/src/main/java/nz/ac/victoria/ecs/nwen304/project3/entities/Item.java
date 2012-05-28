@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -25,11 +24,11 @@ public abstract class Item implements Serializable {
 	 */
 	private String name;
 	
-	/**
-	 * The parent of this item
-	 */
-	@ManyToOne
-	private Container parent;
+//	/**
+//	 * The parent of this item
+//	 */
+//	@ManyToOne
+//	private Container parent;
 	
 	/**
 	 * Has the item been loaded from a datasource or is is created by client code.
@@ -46,10 +45,16 @@ public abstract class Item implements Serializable {
 	 * 
 	 * @param name	The name of the item.
 	 */
+	public Item(final String name) {
+		setUuid(UUID.randomUUID());
+		setName(name);
+	}
+	
+	@Deprecated
 	public Item(final String name, final Container parent) {
 		setUuid(UUID.randomUUID());
 		setName(name);
-		setParent(parent);
+//		setParent(parent);
 	}
 	
 	// -------------------------- Generated Code Below --------------------------
@@ -72,8 +77,8 @@ public abstract class Item implements Serializable {
 		result = prime * result + (this.fromDatasource ? 1231 : 1237);
 		result = prime * result
 				+ ((this.name == null) ? 0 : this.name.hashCode());
-		result = prime * result
-				+ ((this.parent == null) ? 0 : this.parent.hashCode());
+//		result = prime * result
+//				+ ((this.parent == null) ? 0 : this.parent.hashCode());
 		result = prime * result
 				+ ((this.uuid == null) ? 0 : this.uuid.hashCode());
 		return result;
@@ -98,11 +103,11 @@ public abstract class Item implements Serializable {
 				return false;
 		} else if (!this.name.equals(other.name))
 			return false;
-		if (this.parent == null) {
-			if (other.parent != null)
-				return false;
-		} else if (!this.parent.equals(other.parent))
-			return false;
+//		if (this.parent == null) {
+//			if (other.parent != null)
+//				return false;
+//		} else if (!this.parent.equals(other.parent))
+//			return false;
 		if (this.uuid == null) {
 			if (other.uuid != null)
 				return false;
@@ -116,17 +121,17 @@ public abstract class Item implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Item [uuid=" + this.uuid + ", name=" + this.name + ", parent="
-				+ this.parent + ", fromDatasource=" + this.fromDatasource + "]";
+		return "Item [uuid=" + this.uuid + ", name=" + this.name /*+ ", parent="
+				+ this.parent*/ + ", fromDatasource=" + this.fromDatasource + "]";
 	}
 
-	public Item getParent() {
-		return this.parent;
-	}
-
-	public void setParent(final Container parent) {
-		this.parent = parent;
-	}
+//	public Item getParent() {
+//		return this.parent;
+//	}
+//
+//	public void setParent(final Container parent) {
+//		this.parent = parent;
+//	}
 
 	/**
 	 * @return the fromDatasource

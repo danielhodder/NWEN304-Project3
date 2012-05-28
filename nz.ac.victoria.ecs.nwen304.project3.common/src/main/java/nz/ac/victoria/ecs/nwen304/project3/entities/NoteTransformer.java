@@ -8,8 +8,12 @@ import flexjson.ObjectBinder;
 
 public final class NoteTransformer extends Transformer {
 
+	@SuppressWarnings("rawtypes") // From the interface we are implementing
 	@Override
 	public Object instantiate(final ObjectBinder arg0, final Object arg1, final Type arg2, final Class arg3) {
+		if (!arg3.equals(Note.class))
+			throw new IllegalArgumentException("The note transformer only transforms notes, not "+arg3.getName());
+		
 		if (!(arg1 instanceof Map<?, ?>))
 			throw new IllegalArgumentException("Invalid instantiation type");
 		
@@ -54,10 +58,6 @@ public final class NoteTransformer extends Transformer {
 			getContext().writeName("delete");
 			getContext().writeQuoted(
 					String.format("http://%s/Note/%s", serilizationProperties.getProperty("http.host"), note.getUuid().toString()));
-			getContext().writeComma();
-			
-			getContext().writeName("parent");
-			getContext().writeQuoted(String.format("http://%s/Container/%s", serilizationProperties.getProperty("http.host"), note.getParent().getUuid().toString()));
 		getContext().writeCloseObject();
 		
 		getContext().writeCloseObject();
