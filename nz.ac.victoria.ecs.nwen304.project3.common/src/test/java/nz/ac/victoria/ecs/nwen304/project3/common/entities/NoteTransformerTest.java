@@ -51,15 +51,34 @@ public class NoteTransformerTest {
 	}
 	
 	@Test
+	public void testInflateOfNewObject() {
+		final Note n = new Note("note1", null, "blarg");
+		
+		final String format = "{\"type\":\"note\",\"name\":\"%s\",\"contents\":\"%s\",\"links\":{" +
+				"\"self\":\"http://localhost/Note/%s\"," +
+				"\"update\":\"http://localhost/Note/%s\"," +
+				"\"delete\":\"http://localhost/Note/%s\"}}";
+		
+		final Note deserilized = new JSONDeserializer<Note>().use(Note.class, new NoteTransformer())
+						.deserialize(
+								String.format(format, n.getName(), 
+										n.getContents(), n.getUuid(), n.getUuid(), n.getUuid()), Note.class);
+										
+		assertEquals(n.getContents(), deserilized.getContents());
+		assertEquals(n.getName(), deserilized.getName());
+		assertEquals(n.getClass(), deserilized.getClass());
+	}
+	
+	@Test
 	public void testRoundTrip() {
 		final Note n  = new Note("note1", null, "blarg");
 		
-		String serilize = new JSONSerializer()
+		final String serilize = new JSONSerializer()
 			.transform(new NoteTransformer(), Note.class)
 			.exclude("class")
 			.serialize(n);
 		
-		Object deserilize = new JSONDeserializer<Note>()
+		final Object deserilize = new JSONDeserializer<Note>()
 				.use(Note.class, new NoteTransformer())
 				.deserialize(serilize, Note.class);
 		

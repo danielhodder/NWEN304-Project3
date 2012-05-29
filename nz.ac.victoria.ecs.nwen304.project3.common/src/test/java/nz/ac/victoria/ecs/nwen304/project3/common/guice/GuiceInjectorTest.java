@@ -3,8 +3,10 @@ package nz.ac.victoria.ecs.nwen304.project3.common.guice;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import nz.ac.victoria.ecs.nwen304.project3.guice.GuiceInjector;
 import nz.ac.victoria.ecs.nwen304.project3.guice.InjectObject;
 import nz.ac.victoria.ecs.nwen304.project3.guice.InjectOnCall;
+import nz.ac.victoria.ecs.nwen304.project3.guice.UnInjectAfterCall;
 
 import org.junit.Test;
 
@@ -61,5 +63,24 @@ public class GuiceInjectorTest {
 		}
 		
 		new Test();
+	}
+	
+	@Test
+	public void testUnInject() {
+		@InjectObject
+		class Test {
+			@Inject
+			private Boolean foo;
+			
+			@UnInjectAfterCall
+			void test() {
+				assertNotNull(this.foo);
+				assertTrue(this.foo);
+			}
+		}
+		
+		final Test t = new Test();
+		t.test();
+		assertFalse(GuiceInjector.isInjected(t));
 	}
 }

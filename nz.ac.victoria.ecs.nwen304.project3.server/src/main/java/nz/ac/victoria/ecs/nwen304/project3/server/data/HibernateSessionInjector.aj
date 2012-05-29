@@ -15,7 +15,7 @@ final aspect HibernateSessionInjector {
 	private pointcut transactionalMethod() : execution(@Transactional * *(..));
 	
 	before(HibernateDataExchange hdx) : target(hdx) && transactionalMethod() {
-		Session session = factory.openSession();
+		Session session = this.factory.openSession();
 		session.beginTransaction();
 		hdx.setSession(session);
 	}

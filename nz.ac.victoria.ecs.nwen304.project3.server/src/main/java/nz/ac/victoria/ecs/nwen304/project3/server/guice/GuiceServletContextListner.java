@@ -11,12 +11,12 @@ import com.google.inject.Injector;
 
 public final class GuiceServletContextListner implements ServletContextListener {
 	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
-		/* NOP */
+	public void contextDestroyed(final ServletContextEvent arg0) {
+		injector = null;
 	}
 
 	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
+	public void contextInitialized(final ServletContextEvent arg0) {
 		injector = Guice.createInjector(
 				new HibernateSessionModule(),
 				new HibernateDataExchange.Module());

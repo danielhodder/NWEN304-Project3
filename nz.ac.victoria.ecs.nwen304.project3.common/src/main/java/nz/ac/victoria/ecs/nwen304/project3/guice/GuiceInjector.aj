@@ -22,6 +22,16 @@ public abstract aspect GuiceInjector {
 		}
 	}
 	
+	after(InjectableObject io) : target(io) && execution(@UnInjectAfterCall * *(..)) {
+		if (io.isInjected) {
+			synchronized (io.injectLock) {
+				if (io.isInjected) {
+					io.isInjected = false;
+				}
+			}
+		}
+	}
+	
 	protected abstract Injector getInjector();
 	
 	// Introduce a private field onto the object that shows if it has been injected or not.
@@ -33,4 +43,10 @@ public abstract aspect GuiceInjector {
 		implements InjectableObject;
 	public volatile boolean InjectableObject.isInjected;
 	public Object InjectableObject.injectLock = new Object();
+	
+	public static boolean isInjected(Object object) {
+		if (!(object instanceof InjectableObject))
+			return false;
+		return ((InjectableObject) object).isInjected;
+	}
 }

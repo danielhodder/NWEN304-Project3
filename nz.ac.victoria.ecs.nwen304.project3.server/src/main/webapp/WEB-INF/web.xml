@@ -3,6 +3,18 @@
  xmlns="http://java.sun.com/xml/ns/javaee"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
  <display-name>nz.ac.victoria.ecs.nwen304.project3.server</display-name>
+ <filter>
+  <filter-name>ExceptionHandler</filter-name>
+  <filter-class>nz.ac.victoria.ecs.nwen304.project3.server.servlets.ExceptionHandlingFilter</filter-class>
+ </filter>
+ <filter-mapping>
+  <filter-name>ExceptionHandler</filter-name>
+  <servlet-name>Note</servlet-name>
+ </filter-mapping>
+ <filter-mapping>
+  <filter-name>ExceptionHandler</filter-name>
+  <servlet-name>Container</servlet-name>
+ </filter-mapping>
  <listener>
   <listener-class>nz.ac.victoria.ecs.nwen304.project3.server.guice.GuiceServletContextListner</listener-class>
  </listener>
@@ -25,12 +37,4 @@
   <servlet-name>Container</servlet-name>
   <url-pattern>/Container/*</url-pattern>
  </servlet-mapping>
- <welcome-file-list>
-  <welcome-file>index.html</welcome-file>
-  <welcome-file>index.htm</welcome-file>
-  <welcome-file>index.jsp</welcome-file>
-  <welcome-file>default.html</welcome-file>
-  <welcome-file>default.htm</welcome-file>
-  <welcome-file>default.jsp</welcome-file>
- </welcome-file-list>
 </web-app>

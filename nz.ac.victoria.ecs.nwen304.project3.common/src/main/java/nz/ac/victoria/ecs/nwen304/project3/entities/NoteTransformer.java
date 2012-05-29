@@ -18,7 +18,9 @@ public final class NoteTransformer extends Transformer {
 			throw new IllegalArgumentException("Invalid instantiation type");
 		
 		final Map<?, ?> map = (Map<?, ?>) arg1;
-		final Note n = new Note((String) map.get("name"), (String) map.get("contents"), UUID.fromString((String) map.get("uuid")));
+		final Note n = new Note((String) map.get("name"), (String) map.get("contents"));
+		if (map.get("uuid") != null)
+			n.setUuid(UUID.fromString((String) map.get("uuid")));
 		
 		return n;
 	}
@@ -40,24 +42,24 @@ public final class NoteTransformer extends Transformer {
 		writeItemElements(note);
 		
 		getContext().writeName("contents");
-		getContext().writeQuoted(note.getContents());
+		getContext().writeQuoted(note.getContents() == null ? "" : note.getContents());
 		getContext().writeComma();
 		
 		getContext().writeName("links");
 		getContext().writeOpenObject();
 			getContext().writeName("self");
 			getContext().writeQuoted(
-					String.format("http://%s/Note/%s", serilizationProperties.getProperty("http.host"), note.getUuid().toString()));
+					String.format("%s/Note/%s", serilizationProperties.getProperty("http.prefix"), note.getUuid().toString()));
 			getContext().writeComma();
 			
 			getContext().writeName("update");
 			getContext().writeQuoted(
-					String.format("http://%s/Note/%s", serilizationProperties.getProperty("http.host"), note.getUuid().toString()));
+					String.format("%s/Note/%s", serilizationProperties.getProperty("http.prefix"), note.getUuid().toString()));
 			getContext().writeComma();
 			
 			getContext().writeName("delete");
 			getContext().writeQuoted(
-					String.format("http://%s/Note/%s", serilizationProperties.getProperty("http.host"), note.getUuid().toString()));
+					String.format("%s/Note/%s", serilizationProperties.getProperty("http.prefix"), note.getUuid().toString()));
 		getContext().writeCloseObject();
 		
 		getContext().writeCloseObject();

@@ -10,12 +10,13 @@ import flexjson.ObjectBinder;
 
 public class ContainerTransformer extends Transformer {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object instantiate(
-			ObjectBinder context, 
-			Object value, 
-			Type targetType, 
-			@SuppressWarnings("rawtypes") Class targetClass // Because of the interface we implement
+			final ObjectBinder context, 
+			final Object value, 
+			final Type targetType, 
+			@SuppressWarnings("rawtypes") final Class targetClass // Because of the interface we implement
 	) {
 		if (!targetClass.equals(Container.class))
 			throw new IllegalArgumentException("The container transformer only transforms containers, not "+targetClass.getName());
@@ -23,12 +24,15 @@ public class ContainerTransformer extends Transformer {
 		if (!(value instanceof Map<?, ?>))
 			throw new IllegalArgumentException("Invalid instantiation type");
 		
-		Map<?, ?> map = (Map<?, ?>) value;
-		Container c = new Container((String) map.get("name"));
-		c.setUuid(UUID.fromString((String) map.get("uuid")));
-		List<Item> contents = new LinkedList<Item>();
-		for (Object o : (Iterable<Object>) map.get("contents"))
-			contents.add((Item) context.bind(o));
+		final Map<?, ?> map = (Map<?, ?>) value;
+		final Container c = new Container((String) map.get("name"));
+		if (map.get("uuid") != null)
+			c.setUuid(UUID.fromString((String) map.get("uuid")));
+		
+		final List<Item> contents = new LinkedList<Item>();
+		for (final Object o : (Iterable<Object>) map.get("contents"))
+			contents.add((Item) new RawDeserilizer().instantiate(context, o, null, null));
+		
 		if (((Map<?,?>) map.get("links")).get("parent") == null)
 			c.setRoot(true);
 		
@@ -36,11 +40,11 @@ public class ContainerTransformer extends Transformer {
 	}
 
 	@Override
-	public void transform(Object object) {
+	public void transform(final Object object) {
 		if (!(object instanceof Container))
 			throw new IllegalArgumentException("Object must be a container, was given: " + object);
 		
-		Container container = (Container) object;
+		final Container container = (Container) object;
 		
 		getContext().writeOpenObject();
 			getContext().writeName("type");
@@ -63,26 +67,26 @@ public class ContainerTransformer extends Transformer {
 			getContext().writeName("links");
 			getContext().writeOpenObject();
 				getContext().writeName("self");
-				getContext().writeQuoted(String.format("http://%s/Container/%s", 
-						serilizationProperties.getProperty("http.host"), container.getUuid().toString()));
+				getContext().writeQuoted(String.format("%s/Container/%s", 
+						serilizationProperties.getProperty("http.prefix"), container.getUuid().toString()));
 				getContext().writeComma();
 				
 				getContext().writeName("update");
-				getContext().writeQuoted(String.format("http://%s/Container/%s", 
-						serilizationProperties.getProperty("http.host"), container.getUuid().toString()));
+				getContext().writeQuoted(String.format("%s/Container/%s", 
+						serilizationProperties.getProperty("http.prefix"), container.getUuid().toString()));
 				getContext().writeComma();
 				
 				getContext().writeName("add");
-				getContext().writeQuoted(String.format("http://%s/Container/%s", 
-						serilizationProperties.getProperty("http.host"), container.getUuid().toString()));
+				getContext().writeQuoted(String.format("%s/Container/%s", 
+						serilizationProperties.getProperty("http.prefix"), container.getUuid().toString()));
 					
 				if (!container.isRoot()) {
 					getContext().writeComma();
 				
 					getContext().writeName("delete");
-					getContext().writeQuoted(String.format("http://%s/Container/%s", 
+					getContext().writeQuoted(String.format("%s/Container/%s", 
 
-							serilizationProperties.getProperty("http.host"), container.getUuid().toString()));
+							serilizationProperties.getProperty("http.prefix"), container.getUuid().toString()));
 				}
 			getContext().writeCloseObject();
 		getContext().writeCloseObject();

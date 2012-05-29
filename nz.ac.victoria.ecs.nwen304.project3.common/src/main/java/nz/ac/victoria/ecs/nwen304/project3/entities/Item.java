@@ -3,11 +3,11 @@ package nz.ac.victoria.ecs.nwen304.project3.entities;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 /**
@@ -27,6 +27,7 @@ public abstract class Item implements Serializable {
 	/**
 	 * The name of the item
 	 */
+	@Column(nullable=false)
 	private String name;
 	
 //	/**

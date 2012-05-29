@@ -3,6 +3,7 @@ package nz.ac.victoria.ecs.nwen304.project3.entities;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -18,6 +19,7 @@ public class Note extends Item implements Serializable {
 	/**
 	 * The contents of this note
 	 */
+	@Column(nullable=false)
 	private String contents;
 	
 	// Visible for Hibernate
@@ -28,8 +30,8 @@ public class Note extends Item implements Serializable {
 	 * 
 	 * @param name	The name of the note
 	 */
-	public Note(String name) {
-		super(name);
+	public Note(final String name) {
+		this(name, "");
 	}
 	
 	@Deprecated
@@ -44,6 +46,7 @@ public class Note extends Item implements Serializable {
 	 * @param parent	The parent of the note
 	 * @param contents	The contents of the note
 	 */
+	@Deprecated
 	public Note(final String name, final Container parent, final String contents) {
 		this(name, parent);
 		
@@ -63,7 +66,7 @@ public class Note extends Item implements Serializable {
 	 * @param name	The name of the note
 	 * @param contents	The contents of the note
 	 */
-	public Note(String name, String contents) {
+	public Note(final String name, final String contents) {
 		super(name);
 		
 		setContents(contents);

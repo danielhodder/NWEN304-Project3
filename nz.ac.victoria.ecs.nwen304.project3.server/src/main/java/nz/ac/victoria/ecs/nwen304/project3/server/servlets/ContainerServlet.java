@@ -8,17 +8,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.inject.Inject;
-
-import flexjson.JSONSerializer;
-
 import nz.ac.victoria.ecs.nwen304.project3.data.DataExchange;
 import nz.ac.victoria.ecs.nwen304.project3.entities.Container;
 import nz.ac.victoria.ecs.nwen304.project3.entities.ContainerTransformer;
 import nz.ac.victoria.ecs.nwen304.project3.entities.Item;
 import nz.ac.victoria.ecs.nwen304.project3.entities.Note;
 import nz.ac.victoria.ecs.nwen304.project3.entities.NoteTransformer;
+import nz.ac.victoria.ecs.nwen304.project3.entities.RawDeserilizer;
 import nz.ac.victoria.ecs.nwen304.project3.guice.InjectObject;
+
+import com.google.inject.Inject;
+
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
 
 @InjectObject
 public final class ContainerServlet extends HttpServlet {
@@ -31,11 +33,11 @@ public final class ContainerServlet extends HttpServlet {
 	 * Get a container and it's contents.
 	 */
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
-		UUID containerID = UUID.fromString(req.getPathInfo().substring(1));
+		final UUID containerID = UUID.fromString(req.getPathInfo().substring(1));
 		
-		Item i = this.data.getItemByID(containerID);
+		final Item i = this.data.getItemByID(containerID);
 		
 		if (i == null || (!(i instanceof Container)))
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -48,18 +50,35 @@ public final class ContainerServlet extends HttpServlet {
 	}
 
 	/**
-	 * Create a new container
+	 * Create a new item in a container
 	 */
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
+		final UUID containerID = UUID.fromString(req.getPathInfo().substring(1));
+		final Item container = this.data.getItemByID(containerID);
+		if (container == null || (!(container instanceof Container)))
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		
+		final Item i = new JSONDeserializer<Item>()
+					.deserialize(req.getPathInfo(), new RawDeserilizer());
+		
+		((Container) container).getItems().add(i);
+		
+		this.data.save(container);
+		
+		resp.getWriter().write(new JSONSerializer()
+				.transform(new ContainerTransformer(), Container.class)
+				.transform(new NoteTransformer(), Note.class)
+				.prettyPrint(true)
+				.serialize(i));
 	}
 
 	/**
 	 * Update an existsing container
 	 */
 	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPut(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 	}
 
@@ -67,7 +86,7 @@ public final class ContainerServlet extends HttpServlet {
 	 * Delete a container
 	 */
 	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+	protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 	}
 }
