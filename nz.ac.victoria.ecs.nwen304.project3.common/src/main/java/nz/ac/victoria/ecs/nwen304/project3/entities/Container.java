@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 /**
@@ -20,7 +21,7 @@ public final class Container extends Item {
 	/**
 	 * The items in this container.
 	 */
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	private List<Item> items;
 	
 	/**

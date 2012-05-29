@@ -1,6 +1,8 @@
 package nz.ac.victoria.ecs.nwen304.project3.server.servlets;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,10 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import nz.ac.victoria.ecs.nwen304.project3.data.DataExchange;
+import nz.ac.victoria.ecs.nwen304.project3.entities.Item;
+import nz.ac.victoria.ecs.nwen304.project3.entities.Note;
+import nz.ac.victoria.ecs.nwen304.project3.entities.NoteTransformer;
 import nz.ac.victoria.ecs.nwen304.project3.guice.InjectObject;
 
 import com.google.inject.Inject;
-import com.kingombo.slf5j.Logger;
+
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
 
 /**
  * Handles requests for information about notes
@@ -21,48 +28,63 @@ import com.kingombo.slf5j.Logger;
  */
 @InjectObject
 public final class NoteServlet extends HttpServlet {
+	private static final long serialVersionUID = 3057183228214176466L;
+
 	@Inject
 	private DataExchange data;
 	
-	private Logger logger;
-
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#doDelete(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	/**
+	 * Delete a note from the system
 	 */
 	@Override
 	protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doDelete(req, resp);
+		UUID noteID = UUID.fromString(req.getPathInfo().substring(1));
+		
+		this.data.delete(this.data.getItemByID(noteID));
+		
+		resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
-
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	
+	/**
+	 * Get a note by it's ID
 	 */
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
-		this.logger.debug(req.getPathInfo());
+		UUID noteID = UUID.fromString(req.getPathInfo().substring(1));
+		
+		Item i = this.data.getItemByID(noteID);
+		
+		if (i == null || (!(i instanceof Note)))
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		else 
+			resp.getWriter().write(new JSONSerializer()
+					.transform(new NoteTransformer(), Note.class)
+					.prettyPrint(true)
+					.serialize(i));
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(req, resp);
-	}
-
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#doPut(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	/**
+	 * Update a note. The ID in the request must match the ID in the note itself
 	 */
 	@Override
 	protected void doPut(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPut(req, resp);
+		Note n = new JSONDeserializer<Note>()
+				.use(Note.class, new NoteTransformer())
+				.deserialize(new InputStreamReader(req.getInputStream()));
+		UUID noteID = UUID.fromString(req.getPathInfo().substring(1));
+		
+		if (noteID != n.getUuid())
+			throw new IllegalArgumentException("The UUID of the note is not what was expected");
+		
+		this.data.save(n);
+		
+		resp.getWriter().write(new JSONSerializer()
+				.transform(new NoteTransformer(), Note.class)
+				.prettyPrint(true)
+				.serialize(n));
 	}
 	
 	

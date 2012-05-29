@@ -51,7 +51,7 @@ public class ContainerTransformer extends Transformer {
 			
 			getContext().writeName("contents");
 			getContext().writeOpenArray();
-				for (int i=0; i<container.getItems().size()-1; i++) {
+				for (int i=0; i<container.getItems().size(); i++) {
 					getContext().transform(container.getItems().get(i));
 					
 					if (i != (container.getItems().size()-1))

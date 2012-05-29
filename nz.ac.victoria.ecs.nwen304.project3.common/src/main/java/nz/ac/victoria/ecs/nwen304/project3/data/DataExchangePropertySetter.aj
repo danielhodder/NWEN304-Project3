@@ -1,20 +1,20 @@
 package nz.ac.victoria.ecs.nwen304.project3.data;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Collection;
 
 import nz.ac.victoria.ecs.nwen304.project3.entities.Container;
 import nz.ac.victoria.ecs.nwen304.project3.entities.Item;
 
 public aspect DataExchangePropertySetter {
 	// Get a single item
-	private pointcut getItemByID() : execution(Item DataExchange+.getItemByID(UUID));
+	private pointcut getItemByID() : execution(Item+ DataExchange+.*(..));
 	after() returning (Item item) : getItemByID() {
 		setFromDatasourceOnItem(item);
 	}
 	
 	// Get the contents of a container
-	private pointcut getItemsInContainer() : execution(List<Item> DataExchange+.getAllElementsInContainer(UUID));
+	private pointcut getItemsInContainer() : execution(Collection<Item+>+ DataExchange+.*(..));
 	after() returning (List<Item> items) : getItemsInContainer() {
 		for (Item item : items)
 			setFromDatasourceOnItem(item);
@@ -26,6 +26,9 @@ public aspect DataExchangePropertySetter {
 	 * @param item
 	 */
 	static final void setFromDatasourceOnItem(Item item) {
+		if (item == null)
+			return;
+		
 		item.setFromDatasource(true);
 		
 		if (item instanceof Container)

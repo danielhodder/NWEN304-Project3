@@ -9,7 +9,7 @@ import com.google.inject.Injector;
 import nz.ac.victoria.ecs.nwen304.project3.guice.GuiceInjector;
 
 @Ignore
-aspect TestGuiceInjector extends GuiceInjector {
+aspect TestGuiceInjector extends GuiceInjector pertypewithin(nz.ac.victoria.ecs.nwen304.project3.common.guice.*) {
 	@Override
 	protected Injector getInjector() {
 		return Guice.createInjector(new AbstractModule() {

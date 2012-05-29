@@ -6,9 +6,6 @@ import java.util.Formatter;
 import org.slf4j.Marker;
 
 public class Logger {
-
-    private static ThreadLocal<Formatter> formatterCache = new FormatterCache();
-
     final private org.slf4j.Logger logger;
 
     public Logger(final org.slf4j.Logger logger) {
@@ -261,7 +258,7 @@ public class Logger {
     }
 
     private static Formatter getFormatter() {
-        return formatterCache.get();
+        return new Formatter();
     }
 
     public void traceMethodStart(final Object... args) {

@@ -50,10 +50,23 @@ public class Note extends Item implements Serializable {
 		setContents(contents);
 	}
 	
+	@Deprecated
 	Note(final String name, final String contents, final UUID uuid) {
 		this(name, null, contents);
 		
 		setUuid(uuid);
+	}
+
+	/**
+	 * Create a note with a title and some contents
+	 * 
+	 * @param name	The name of the note
+	 * @param contents	The contents of the note
+	 */
+	public Note(String name, String contents) {
+		super(name);
+		
+		setContents(contents);
 	}
 
 	/**

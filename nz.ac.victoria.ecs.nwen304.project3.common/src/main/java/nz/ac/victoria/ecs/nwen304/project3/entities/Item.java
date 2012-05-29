@@ -3,8 +3,12 @@ package nz.ac.victoria.ecs.nwen304.project3.entities;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 /**
  * The superclass of all things that can be stored.
@@ -12,7 +16,8 @@ import javax.persistence.MappedSuperclass;
  * @author danielh
  *
  */
-@MappedSuperclass
+@Entity
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class Item implements Serializable {
 	private static final long serialVersionUID = 3030360114496496023L;
 	
@@ -33,6 +38,7 @@ public abstract class Item implements Serializable {
 	/**
 	 * Has the item been loaded from a datasource or is is created by client code.
 	 */
+	@Transient
 	private boolean fromDatasource;
 	
 	/**
