@@ -18,11 +18,11 @@ public final class InitialData {
 	public void generateData() {
 		Container rootContainer = new Container("");
 		rootContainer.setRoot(true);
-		rootContainer.setUuid(new UUID(0, 0));
+		rootContainer.setUuid(UUID.randomUUID());
 		
 		{
 			Note note = new Note("Note1", "Text Content");
-			note.setUuid(new UUID(0, 1));
+			note.setUuid(UUID.randomUUID());
 			rootContainer.getItems().add(note);
 			
 			this.exchange.save(note);

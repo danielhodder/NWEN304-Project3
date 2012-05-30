@@ -30,7 +30,7 @@ public class DataExchangePropertySetterTest {
 			public void delete(final Item item) { /* NOP */ }
 
 			@Override
-			public List<Item> getAllElementsInContainer(final Container container) { /* NOP */ return null; }
+			public Container getRootContainer() { return null; }
 		}.getItemByID(null);
 		
 		assertSame(true, item.isFromDatasource());
@@ -51,9 +51,9 @@ public class DataExchangePropertySetterTest {
 			
 			@Override
 			public void delete(final Item item) { /* NOP */ }
-
+			
 			@Override
-			public List<Item> getAllElementsInContainer(final Container container) { /* NOP */ return null; }
+			public Container getRootContainer() { return null; }
 		}.getAllElementsInContainer((UUID) null);
 		
 		for (final Item i : items)
@@ -82,9 +82,9 @@ public class DataExchangePropertySetterTest {
 			
 			@Override
 			public void delete(final Item item) { /* NOP */ }
-
+			
 			@Override
-			public List<Item> getAllElementsInContainer(final Container container) { /* NOP */ return null; }
+			public Container getRootContainer() { return null; }
 		}.getItemByID(null);
 		
 		assertSame(true, ((Container) item).getItems().get(0).isFromDatasource());

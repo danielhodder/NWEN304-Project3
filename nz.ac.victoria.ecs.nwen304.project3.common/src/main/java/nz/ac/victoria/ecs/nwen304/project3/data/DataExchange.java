@@ -14,14 +14,6 @@ import nz.ac.victoria.ecs.nwen304.project3.entities.Item;
  */
 public interface DataExchange {
 	/**
-	 * Get all the elements in the given container.
-	 * 
-	 * @param container	The container to search in, or null for the root container.
-	 * @return	A list containing all the items in the container, or an empty list if there is nothing in the container.
-	 */
-	public List<Item> getAllElementsInContainer(Container container);
-
-	/**
 	 * Save an item to the datastore
 	 * 
 	 * @param item	The item to save
@@ -50,4 +42,11 @@ public interface DataExchange {
 	 * @param item	The item to delete
 	 */
 	public void delete(Item item);
+	
+	/**
+	 * Get the root container.
+	 * 
+	 * @return	The root container.
+	 */
+	public Container getRootContainer();
 }

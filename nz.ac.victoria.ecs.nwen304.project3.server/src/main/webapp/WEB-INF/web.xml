@@ -15,6 +15,10 @@
   <filter-name>ExceptionHandler</filter-name>
   <servlet-name>Container</servlet-name>
  </filter-mapping>
+ <filter-mapping>
+  <filter-name>ExceptionHandler</filter-name>
+  <servlet-name>RootContainer</servlet-name>
+ </filter-mapping>
  <listener>
   <listener-class>nz.ac.victoria.ecs.nwen304.project3.server.guice.GuiceServletContextListner</listener-class>
  </listener>
@@ -29,6 +33,10 @@
   <servlet-name>Container</servlet-name>
   <servlet-class>nz.ac.victoria.ecs.nwen304.project3.server.servlets.ContainerServlet</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>RootContainer</servlet-name>
+  <servlet-class>nz.ac.victoria.ecs.nwen304.project3.server.servlets.RootServlet</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>Note</servlet-name>
   <url-pattern>/Note/*</url-pattern>
@@ -36,5 +44,9 @@
  <servlet-mapping>
   <servlet-name>Container</servlet-name>
   <url-pattern>/Container/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>RootContainer</servlet-name>
+  <url-pattern>/</url-pattern>
  </servlet-mapping>
 </web-app>

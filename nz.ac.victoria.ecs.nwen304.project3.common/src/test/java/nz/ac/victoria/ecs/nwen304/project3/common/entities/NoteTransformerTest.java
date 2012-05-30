@@ -12,7 +12,7 @@ import flexjson.JSONSerializer;
 public class NoteTransformerTest {
 	@Test
 	public void testTransformer() {
-		final Note n = new Note("note1", null, "blarg");
+		final Note n = new Note("note1", "blarg");
 		
 		final String format = "{\"type\":\"note\",\"uuid\":\"%s\",\"name\":\"%s\",\"contents\":\"%s\",\"links\":{" +
 				"\"self\":\"http://localhost/Note/%s\"," +
@@ -36,7 +36,7 @@ public class NoteTransformerTest {
 	
 	@Test
 	public void testInflate() {
-		final Note n = new Note("note1", null, "blarg");
+		final Note n = new Note("note1", "blarg");
 		
 		final String format = "{\"type\":\"note\",\"uuid\":\"%s\",\"name\":\"%s\",\"contents\":\"%s\",\"links\":{" +
 				"\"self\":\"http://localhost/Note/%s\"," +
@@ -52,7 +52,7 @@ public class NoteTransformerTest {
 	
 	@Test
 	public void testInflateOfNewObject() {
-		final Note n = new Note("note1", null, "blarg");
+		final Note n = new Note("note1", "blarg");
 		
 		final String format = "{\"type\":\"note\",\"name\":\"%s\",\"contents\":\"%s\",\"links\":{" +
 				"\"self\":\"http://localhost/Note/%s\"," +
@@ -71,7 +71,7 @@ public class NoteTransformerTest {
 	
 	@Test
 	public void testRoundTrip() {
-		final Note n  = new Note("note1", null, "blarg");
+		final Note n  = new Note("note1", "blarg");
 		
 		final String serilize = new JSONSerializer()
 			.transform(new NoteTransformer(), Note.class)

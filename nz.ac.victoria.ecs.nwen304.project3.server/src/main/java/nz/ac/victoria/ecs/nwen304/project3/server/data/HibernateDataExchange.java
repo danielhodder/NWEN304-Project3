@@ -1,25 +1,21 @@
 package nz.ac.victoria.ecs.nwen304.project3.server.data;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+
+import nz.ac.victoria.ecs.nwen304.project3.data.DataExchange;
+import nz.ac.victoria.ecs.nwen304.project3.entities.Container;
+import nz.ac.victoria.ecs.nwen304.project3.entities.Item;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import com.google.inject.AbstractModule;
 
-import nz.ac.victoria.ecs.nwen304.project3.data.DataExchange;
-import nz.ac.victoria.ecs.nwen304.project3.entities.Container;
-import nz.ac.victoria.ecs.nwen304.project3.entities.Item;
-
 public class HibernateDataExchange implements DataExchange {
-	@Transactional
-	@Override
-	public List<Item> getAllElementsInContainer(Container container) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Transactional
 	@Override
 	public void save(Item item) {
@@ -37,15 +33,26 @@ public class HibernateDataExchange implements DataExchange {
 	@Transactional
 	@Override
 	public List<Item> getAllElementsInContainer(UUID containerID) {
-		// TODO Auto-generated method stub
-		return null;
+		Item container = getItemByID(containerID);
+		
+		if (!(container instanceof Container))
+			return new ArrayList<Item>(0);
+		
+		return ((Container) container).getItems();
 	}
 
 	@Transactional
 	@Override
 	public void delete(Item item) {
-		// TODO Auto-generated method stub
-
+		getSession().delete(item);
+	}
+	
+	@Transactional
+	@Override
+	public Container getRootContainer() {
+		return (Container) getSession().createCriteria(Container.class)
+				.add(Restrictions.eq("root", true))
+				.uniqueResult();
 	}
 	
 	private Session session;

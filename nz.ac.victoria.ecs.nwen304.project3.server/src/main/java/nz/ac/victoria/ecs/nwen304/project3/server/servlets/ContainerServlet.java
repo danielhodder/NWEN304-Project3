@@ -80,6 +80,28 @@ public final class ContainerServlet extends HttpServlet {
 	@Override
 	protected void doPut(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
+		final UUID containerID = UUID.fromString(req.getPathInfo().substring(1));
+		final Item container = this.data.getItemByID(containerID);
+		if ( container == null || (!(container instanceof Container)))
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		
+		final Item i = new JSONDeserializer<Item>()
+					.deserialize(req.getPathInfo(), new RawDeserilizer());
+		if (i.getUuid() == null)
+			throw new IllegalArgumentException("Given item does not have an ID");
+		
+		final Item current = this.data.getItemByID(i.getUuid());
+		
+		((Container) container).getItems().remove(current);
+		((Container) container).getItems().add(i);
+		
+		this.data.save(container);
+		
+		resp.getWriter().write(new JSONSerializer()
+				.transform(new ContainerTransformer(), Container.class)
+				.transform(new NoteTransformer(), Note.class)
+				.prettyPrint(true)
+				.serialize(i));
 	}
 
 	/**
@@ -88,5 +110,22 @@ public final class ContainerServlet extends HttpServlet {
 	@Override
 	protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
+		final UUID containerID = UUID.fromString(req.getPathInfo().substring(1));
+		final Item container = this.data.getItemByID(containerID);
+		if ( container == null || (!(container instanceof Container)))
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		
+		final Item i = new JSONDeserializer<Item>()
+					.deserialize(req.getPathInfo(), new RawDeserilizer());
+		if (i.getUuid() == null)
+			throw new IllegalArgumentException("Given item does not have an ID");
+		
+		final Item current = this.data.getItemByID(i.getUuid());
+		
+		((Container) container).getItems().remove(current);
+		
+		this.data.save(container);
+		
+		resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 }
