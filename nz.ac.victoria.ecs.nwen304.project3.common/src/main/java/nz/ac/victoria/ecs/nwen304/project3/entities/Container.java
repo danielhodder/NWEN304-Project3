@@ -96,8 +96,21 @@ public final class Container extends Item {
 		if (this.items == null) {
 			if (other.items != null)
 				return false;
-		} else if (!this.items.equals(other.items))
-			return false;
+		} else {
+			if (other.items.size() != this.items.size())
+				return false;
+			
+			for (int i=0; i<this.items.size(); i++) {
+				if (other.items.get(i) == null && this.items.get(i) == null)
+					continue;
+				if
+						((other.items.get(i) != null && this.items.get(i) != null) && 
+						(other.items.get(i).equals(this.items.get(i))))
+					continue;
+				else
+					return false;
+			}
+		}
 		return true;
 	}
 

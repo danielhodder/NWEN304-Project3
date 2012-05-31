@@ -23,6 +23,7 @@ public class HibernateDataExchangeTest {
 	@Test
 	public void testRootContainer() {
 		Container c = new Container("foo");
+		c.setRoot(true);
 		this.data.save(c);
 		
 		assertEquals(c, this.data.getRootContainer());

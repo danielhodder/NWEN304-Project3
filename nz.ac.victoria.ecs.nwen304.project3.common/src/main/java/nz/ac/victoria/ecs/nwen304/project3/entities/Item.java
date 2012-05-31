@@ -103,8 +103,6 @@ public abstract class Item implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		final Item other = (Item) obj;
-		if (this.fromDatasource != other.fromDatasource)
-			return false;
 		if (this.name == null) {
 			if (other.name != null)
 				return false;
