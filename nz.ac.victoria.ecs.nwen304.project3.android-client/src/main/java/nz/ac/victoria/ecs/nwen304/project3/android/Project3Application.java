@@ -2,6 +2,8 @@ package nz.ac.victoria.ecs.nwen304.project3.android;
 
 import java.util.List;
 
+import nz.ac.victoria.ecs.nwen304.project3.android.data.HttpDataExchange;
+
 import roboguice.application.RoboApplication;
 
 import com.google.inject.Module;
@@ -20,5 +22,6 @@ public final class Project3Application extends RoboApplication {
     
     @Override
     protected void addApplicationModules(final List<Module> modules) {
+//    	modules.add(new HttpDataExchange.Module());
     }
 }

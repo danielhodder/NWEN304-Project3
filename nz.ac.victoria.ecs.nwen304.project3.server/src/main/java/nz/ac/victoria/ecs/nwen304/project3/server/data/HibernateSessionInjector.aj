@@ -50,18 +50,18 @@ final aspect HibernateSessionInjector {
 	
 	private void push(HibernateDataExchange hdx) {
 		if (!objects.containsKey(hdx))
-			objects.put(hdx, new Stack<Object>());
+			objects.put(hdx, 0);
 		
-		objects.get(hdx).push(new Object());
+		objects.put(hdx, objects.get(hdx)+1);
 	}
 	
 	private void pop(HibernateDataExchange hdx) {
-		objects.get(hdx).pop();
+		objects.put(hdx, objects.get(hdx)-1);
 	}
 	
 	private int size(HibernateDataExchange hdx) {
-		return objects.get(hdx).size();
+		return objects.get(hdx);
 	}
 	
-	private Map<Object, Stack<Object>> objects = new ConcurrentHashMap<Object, Stack<Object>>();
+	private Map<Object, Integer> objects = new ConcurrentHashMap<Object, Integer>();
 }

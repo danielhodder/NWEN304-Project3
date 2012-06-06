@@ -73,10 +73,10 @@ public final class NoteServlet extends HttpServlet {
 			throws ServletException, IOException {
 		Note n = new JSONDeserializer<Note>()
 				.use(Note.class, new NoteTransformer())
-				.deserialize(new InputStreamReader(req.getInputStream()));
+				.deserialize(new InputStreamReader(req.getInputStream()), Note.class);
 		UUID noteID = UUID.fromString(req.getPathInfo().substring(1));
 		
-		if (noteID != n.getUuid())
+		if (!noteID.equals(n.getUuid()))
 			throw new IllegalArgumentException("The UUID of the note is not what was expected");
 		
 		this.data.save(n);

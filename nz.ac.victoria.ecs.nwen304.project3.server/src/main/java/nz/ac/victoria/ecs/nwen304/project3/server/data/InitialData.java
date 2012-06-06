@@ -16,7 +16,7 @@ public final class InitialData {
 	
 	@InjectOnCall
 	public void generateData() {
-		Container rootContainer = new Container("");
+		Container rootContainer = new Container("My Notes");
 		rootContainer.setRoot(true);
 		rootContainer.setUuid(UUID.randomUUID());
 		
@@ -26,6 +26,23 @@ public final class InitialData {
 			rootContainer.getItems().add(note);
 			
 			this.exchange.save(note);
+		}
+		
+		{
+			Container subContainer = new Container("Secret Notes");
+			subContainer.setUuid(UUID.randomUUID());
+			
+			{
+				Note secretNote = new Note("Secret Note", "This is a secret note");
+				secretNote.setUuid(UUID.randomUUID());
+				subContainer.getItems().add(secretNote);
+				
+				this.exchange.save(secretNote);
+			}
+			
+			rootContainer.getItems().add(subContainer);
+			
+			this.exchange.save(subContainer);
 		}
 		
 		this.exchange.save(rootContainer);

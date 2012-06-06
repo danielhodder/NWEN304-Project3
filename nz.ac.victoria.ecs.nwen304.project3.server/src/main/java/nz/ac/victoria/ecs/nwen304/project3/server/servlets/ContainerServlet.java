@@ -18,6 +18,7 @@ import nz.ac.victoria.ecs.nwen304.project3.entities.RawDeserilizer;
 import nz.ac.victoria.ecs.nwen304.project3.guice.InjectObject;
 
 import com.google.inject.Inject;
+import com.kingombo.slf5j.Logger;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
@@ -25,6 +26,8 @@ import flexjson.JSONSerializer;
 @InjectObject
 public final class ContainerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private Logger logger;
 	
 	@Inject
 	private DataExchange data;
@@ -37,11 +40,15 @@ public final class ContainerServlet extends HttpServlet {
 			throws ServletException, IOException {
 		final UUID containerID = UUID.fromString(req.getPathInfo().substring(1));
 		
+		logger.trace("Requesting container with ID %s", containerID);
+		
 		final Item i = this.data.getItemByID(containerID);
 		
-		if (i == null || (!(i instanceof Container)))
+		if (i == null || (!(i instanceof Container))) {
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		else 
+			
+			logger.info("Could not find container with id %s", containerID);
+		} else 
 			resp.getWriter().write(new JSONSerializer()
 					.transform(new ContainerTransformer(), Container.class)
 					.transform(new NoteTransformer(), Note.class)
@@ -61,10 +68,13 @@ public final class ContainerServlet extends HttpServlet {
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		
 		final Item i = new JSONDeserializer<Item>()
-					.deserialize(req.getPathInfo(), new RawDeserilizer());
+					.deserialize(req.getReader(), new RawDeserilizer());
+		if (i instanceof Container)
+			((Container) i).setRoot(false);
 		
 		((Container) container).getItems().add(i);
 		
+		this.data.save(i);
 		this.data.save(container);
 		
 		resp.getWriter().write(new JSONSerializer()
@@ -86,7 +96,7 @@ public final class ContainerServlet extends HttpServlet {
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		
 		final Item i = new JSONDeserializer<Item>()
-					.deserialize(req.getPathInfo(), new RawDeserilizer());
+					.deserialize(req.getReader(), new RawDeserilizer());
 		if (i.getUuid() == null)
 			throw new IllegalArgumentException("Given item does not have an ID");
 		
@@ -116,7 +126,7 @@ public final class ContainerServlet extends HttpServlet {
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		
 		final Item i = new JSONDeserializer<Item>()
-					.deserialize(req.getPathInfo(), new RawDeserilizer());
+					.deserialize(req.getReader(), new RawDeserilizer());
 		if (i.getUuid() == null)
 			throw new IllegalArgumentException("Given item does not have an ID");
 		

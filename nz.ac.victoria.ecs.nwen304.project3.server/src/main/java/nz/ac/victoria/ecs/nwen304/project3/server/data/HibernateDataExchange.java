@@ -19,7 +19,7 @@ public class HibernateDataExchange implements DataExchange {
 	@Transactional
 	@Override
 	public void save(Item item) {
-		getSession().save(item);
+		getSession().merge(item);
 	}
 
 	@Transactional

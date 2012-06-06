@@ -32,6 +32,7 @@ public class ContainerTransformer extends Transformer {
 		final List<Item> contents = new LinkedList<Item>();
 		for (final Object o : (Iterable<Object>) map.get("contents"))
 			contents.add((Item) new RawDeserilizer().instantiate(context, o, null, null));
+		c.setItems(contents);
 		
 		if (((Map<?,?>) map.get("links")).get("parent") == null)
 			c.setRoot(true);
