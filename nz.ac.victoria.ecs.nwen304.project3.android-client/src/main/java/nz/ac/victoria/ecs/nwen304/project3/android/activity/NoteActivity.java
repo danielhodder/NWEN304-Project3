@@ -7,8 +7,12 @@ import nz.ac.victoria.ecs.nwen304.project3.android.data.HttpDataExchange;
 import nz.ac.victoria.ecs.nwen304.project3.entities.Note;
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +52,13 @@ public final class NoteActivity extends BaseActivity {
 				public void onClick(View v) {
 					thisNote.setName(name.getText().toString());
 					thisNote.setContents(content.getText().toString());
+					
+					// Set the location information
+					String locationProvider = LocationManager.NETWORK_PROVIDER;
+					Location location = ((LocationManager) getSystemService(Context.LOCATION_SERVICE))
+							.getLastKnownLocation(locationProvider);
+					thisNote.setLatatude(location.getLatitude());
+					thisNote.setLongdtude(location.getLongitude());
 					
 					if (isNewNote)
 						data.addToContainer(thisNote, UUID.fromString(

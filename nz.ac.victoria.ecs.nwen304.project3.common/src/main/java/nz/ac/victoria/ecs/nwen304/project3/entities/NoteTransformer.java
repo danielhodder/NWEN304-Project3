@@ -19,8 +19,11 @@ public final class NoteTransformer extends Transformer {
 		
 		final Map<?, ?> map = (Map<?, ?>) arg1;
 		final Note n = new Note((String) map.get("name"), (String) map.get("contents"));
+		
 		if (map.get("uuid") != null)
 			n.setUuid(UUID.fromString((String) map.get("uuid")));
+		n.setLatatude((Double) map.get("latatude"));
+		n.setLongdtude((Double) map.get("longditude"));
 		
 		return n;
 	}
@@ -43,6 +46,14 @@ public final class NoteTransformer extends Transformer {
 		
 		getContext().writeName("contents");
 		getContext().writeQuoted(note.getContents() == null ? "" : note.getContents());
+		getContext().writeComma();
+		
+		getContext().writeName("latatude");
+		getContext().write(String.valueOf(note.getLatatude()));
+		getContext().writeComma();
+		
+		getContext().writeName("longditude");
+		getContext().write(String.valueOf(note.getLongdtude()));
 		getContext().writeComma();
 		
 		getContext().writeName("links");

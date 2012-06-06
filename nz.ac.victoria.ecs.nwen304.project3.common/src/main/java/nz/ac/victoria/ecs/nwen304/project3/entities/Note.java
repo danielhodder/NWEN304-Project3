@@ -22,6 +22,18 @@ public class Note extends Item implements Serializable {
 	@Column(nullable=false)
 	private String contents;
 	
+	/**
+	 * The latatude of the location where the note was made
+	 */
+	@Column(nullable=false)
+	private double latatude;
+	
+	/**
+	 * The longdtude of the the location where the note was made
+	 */
+	@Column(nullable=false)
+	private double longdtude;
+	
 	// Visible for Hibernate
 	Note() {}
 	
@@ -86,46 +98,71 @@ public class Note extends Item implements Serializable {
 		this.contents = contents;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result
-				+ ((this.contents == null) ? 0 : this.contents.hashCode());
+				+ ((contents == null) ? 0 : contents.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(latatude);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(longdtude);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final Note other = (Note) obj;
-		if (this.contents == null) {
+		Note other = (Note) obj;
+		if (contents == null) {
 			if (other.contents != null)
 				return false;
-		} else if (!this.contents.equals(other.contents))
+		} else if (!contents.equals(other.contents))
+			return false;
+		if (Double.doubleToLongBits(latatude) != Double
+				.doubleToLongBits(other.latatude))
+			return false;
+		if (Double.doubleToLongBits(longdtude) != Double
+				.doubleToLongBits(other.longdtude))
 			return false;
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Note [contents=" + this.contents + ", getName()="
-				+ getName() + ", isFromDatasource()="
-				+ isFromDatasource() + ", getUuid()=" + getUuid()
-				+ "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Note [contents=");
+		builder.append(contents);
+		builder.append(", latatude=");
+		builder.append(latatude);
+		builder.append(", longdtude=");
+		builder.append(longdtude);
+		builder.append(", getUuid()=");
+		builder.append(getUuid());
+		builder.append("]");
+		return builder.toString();
+	}
+
+	public double getLatatude() {
+		return latatude;
+	}
+
+	public void setLatatude(double latatude) {
+		this.latatude = latatude;
+	}
+
+	public double getLongdtude() {
+		return longdtude;
+	}
+
+	public void setLongdtude(double longdtude) {
+		this.longdtude = longdtude;
 	}
 }
